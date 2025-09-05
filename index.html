@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stunning Interactive Guide to @Transactional Mistakes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Aurora Glass -->
+    <!-- Application Structure Plan: The structure remains a highly effective two-column layout. The revolutionary changes are in the UI/UX layer. The goal is to create a viral-worthy "100M likes" experience by employing cutting-edge design trends like Glassmorphism and animated Aurora backgrounds. This makes the technical content feel incredibly modern and engaging, encouraging users to share it not just for its information but for its design excellence. -->
+    <!-- Visualization & Content Choices: The core interactive element, the code toggle, is retained but visually enhanced. The primary "wow" factor comes from the animated, glowing, and transparent UI elements. The Aurora background that subtly shifts behind the glass-like cards creates a dynamic and immersive learning environment. This approach is designed to be visually stunning and memorable. NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+        :root {
+            --bg-color: #020617;
+            --card-bg-color: rgba(15, 23, 42, 0.6);
+            --border-color: rgba(51, 65, 85, 0.6);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent-glow: #a78bfa;
+            --accent-pink: #ec4899;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-secondary);
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 20%, rgba(167, 139, 250, 0.15) 0%, transparent 30%),
+                              radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15) 0%, transparent 30%);
+            z-index: -1;
+            animation: moveAurora 20s infinite linear;
+        }
+        @keyframes moveAurora {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1, h2, h3, h4 { font-family: 'Inter', sans-serif; font-weight: 800; color: var(--text-primary); }
+        code, pre { font-family: 'Fira Code', monospace; }
+
+        .animated-gradient-text {
+            animation: gradient-animation 5s ease infinite;
+            background-size: 200% 200%;
+        }
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-link.highlight {
+            background-image: linear-gradient(to right, var(--accent-glow), var(--accent-pink));
+            color: white;
+            font-weight: 600;
+        }
+
+        .content-section {
+            scroll-margin-top: 5rem;
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            position: relative;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .content-section::after {
+            content: '';
+            position: absolute;
+            top: -50%; right: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.2), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            pointer-events: none;
+            transform: translate(var(--x, 0), var(--y, 0));
+        }
+        .content-section:hover::after { opacity: 1; }
+
+        pre { background-color: rgba(2, 6, 23, 0.5); border: 1px solid var(--border-color); }
+        .code-keyword { color: #ff79c6; }
+        .code-annotation { color: #f1fa8c; }
+        .code-string { color: #50fa7b; }
+        .code-comment { color: #6272a4; }
+        .code-type { color: #8be9fd; }
+        .code-method { color: #50fa7b; }
+        .code-number { color: #bd93f9; }
+        .code-class-name { color: #8be9fd; font-style: italic; }
+
+        .active-toggle { background-color: var(--accent-glow); color: #020617; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="text-slate-400">
+
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header class="py-20 text-center">
+            <h1 class="text-6xl font-extrabold tracking-tight bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text animated-gradient-text">
+                The Ultimate Guide to @Transactional
+            </h1>
+            <p class="mt-6 text-xl text-slate-400 max-w-3xl mx-auto">Master Spring's most powerful annotation. Avoid the common pitfalls with a stunning, interactive experience.</p>
+        </header>
+
+        <div class="lg:grid lg:grid-cols-12 lg:gap-12">
+            <aside class="hidden lg:block lg:col-span-3">
+                <nav id="desktop-nav" class="sticky top-10">
+                    <div class="mt-4 space-y-6" id="nav-container"></div>
+                </nav>
+            </aside>
+
+            <main class="lg:col-span-9">
+                <div id="content-container" class="space-y-16">
+                    <!-- Content will be injected here by JavaScript -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer class="text-center py-16 mt-20 border-t border-slate-800/50">
+        <p class="text-sm text-slate-500">Built to make complex topics beautiful & understandable.</p>
+    </footer>
+
+    <script>
+        const mistakesData = [
+            {
+                category: "Part 1: The Proxy Problem",
+                items: [
+                    { id: "private-methods", title: "1. Using on Private Methods", mistake: "Spring's proxy intercepts calls to `public` methods to manage transactions. It **cannot** see or intercept calls to `private` methods, so no transaction will be created.", incorrectCode: `@Service\npublic class MyService {\n    public void publicMethod() {\n        // This call bypasses the proxy. No transaction will be created.\n        this.privateTransactionalMethod();\n    }\n\n    @Transactional\n    private void privateTransactionalMethod() { /* Database logic here... */ }\n}`, correctCode: `@Service\npublic class MyService {\n    @Transactional\n    public void publicTransactionalMethod() {\n        // This will run in a transaction.\n    }\n}`, fix: "Always place `@Transactional` on `public` methods." },
+                    { id: "self-invocation", title: "2. Self-Invocation Bypasses Proxy", mistake: "Calling another `public` transactional method from within the same class using `this` also bypasses the proxy. The call is a direct method invocation on the original object, not the proxy that adds the transactional behavior.", incorrectCode: `@Service\npublic class MyService {\n    public void methodA() {\n        // This call to methodB() is a direct call, bypassing the proxy.\n        this.methodB();\n    }\n\n    @Transactional(propagation = Propagation.REQUIRES_NEW)\n    public void methodB() { /* This logic will NOT run in a new transaction. */ }\n}`, correctCode: `@Service\npublic class MyService {\n    @Autowired\n    private MyService self; // Inject the proxy of the current bean\n\n    public void methodA() {\n        // By calling on 'self', you are going through the proxy.\n        self.methodB();\n    }\n\n    @Transactional(propagation = Propagation.REQUIRES_NEW)\n    public void methodB() { /* This will now correctly start a new transaction. */ }\n}`, fix: "To make self-invocation work, you must call the method through the proxy. The standard way is to inject the bean into itself." },
+                    { id: "final-methods", title: "3. Using on `final` Methods or Classes", mistake: "Spring AOP creates a proxy by creating a subclass of your service at runtime (using CGLIB). The `final` keyword in Java prevents a class from being subclassed or a method from being overridden. Therefore, Spring cannot create the proxy, and `@Transactional` is ignored.", incorrectCode: `// Spring cannot create a proxy for a final class.\n@Service\npublic final class FinalService {\n    @Transactional\n    public void doWork() { /* No transaction here */ }\n}\n\n@Service\npublic class AnotherService {\n    // Spring cannot override this final method in its proxy subclass.\n    @Transactional\n    public final void doFinalWork() { /* No transaction here */ }\n}`, correctCode: `@Service\npublic class CorrectService {\n    @Transactional\n    public void doWork() { /* This works! */ }\n}`, fix: "Avoid using `final` on Spring beans and their public methods that require proxying." },
+                    { id: "non-spring-beans", title: "4. Using on Non-Spring Beans", mistake: "The `@Transactional` annotation is processed by Spring's infrastructure. If you apply it to a class that is not managed by the Spring container (e.g., an object you create manually with `new`), Spring is unaware of it, and no transactional logic will be applied.", incorrectCode: `public class MyManualObject {\n    @Transactional\n    public void doWork() {\n        // This has no effect because Spring doesn't manage this object.\n    }\n}\n\n// In some other class:\npublic void someMethod() {\n    MyManualObject obj = new MyManualObject();\n    obj.doWork(); // No transaction is created.\n}`, correctCode: `@Service // Or @Component, @Repository\npublic class MyManagedObject {\n    @Transactional\n    public void doWork() {\n        // This will now work as expected.\n    }\n}`, fix: "Ensure any class using `@Transactional` is a Spring-managed bean (e.g., annotated with `@Service`, `@Component`, `@Repository`)." }
+                ]
+            },
+            {
+                category: "Part 2: Rollback Rules",
+                items: [
+                    { id: "checked-exceptions", title: "5. Not Rolling Back for Checked Exceptions", mistake: "By default, Spring only marks a transaction for rollback on `RuntimeException` and `Error`. It does **not** roll back for checked exceptions (e.g., `IOException`, `SQLException`).", incorrectCode: `@Service\npublic class FileProcessorService {\n    @Transactional\n    public void processFile() throws IOException {\n        // ... database logic ...\n        if (someCondition) {\n            // The transaction will COMMIT by default, despite this exception.\n            throw new IOException("Failed to write to file!");\n        }\n    }\n}`, correctCode: `@Service\npublic class FileProcessorService {\n    @Transactional(rollbackFor = IOException.class)\n    public void processFile() throws IOException {\n        // Now, this exception will correctly trigger a transaction rollback.\n        throw new IOException("Failed to write to file!");\n    }\n}`, fix: "Explicitly tell Spring to roll back for specific checked exceptions using the `rollbackFor` attribute." },
+                    { id: "swallowing-exceptions", title: "6. Swallowing Exceptions", mistake: "If you catch an exception inside a transactional method and don't re-throw it, the transaction manager never sees it. From its perspective, the method completed successfully, so it will `commit` the transaction.", incorrectCode: `@Service\npublic class UserService {\n    @Transactional\n    public void createUser(User user) {\n        try {\n            userRepository.save(user);\n            // Imagine this next call throws a RuntimeException\n            externalApiService.registerUser(user);\n        } catch (RuntimeException e) {\n            // The exception is caught. The transaction will COMMIT.\n            log.error("Failed to register user", e);\n        }\n    }\n}`, correctCode: `@Service\npublic class UserService {\n    @Transactional\n    public void createUser(User user) {\n        try {\n            userRepository.save(user);\n            externalApiService.registerUser(user);\n        } catch (RuntimeException e) {\n            log.error("Failed to register user", e);\n            // Re-throwing the exception ensures the transaction will ROLL BACK.\n            throw e;\n        }\n    }\n}`, fix: "If you must catch an exception, you must re-throw it so the transaction manager can handle it." }
+                ]
+            },
+            {
+                category: "Part 3: Transaction Lifecycle & Data Visibility",
+                items: [
+                    { id: "lazy-initialization", title: "7. `LazyInitializationException` Outside Transaction", mistake: "A classic JPA issue. You fetch an entity within a transaction but don't access its lazily-loaded collections. The transaction commits, the database session closes, and later you try to access the collection, causing a `LazyInitializationException`.", incorrectCode: `// Service Layer\n@Service\npublic class OrderService {\n    @Transactional(readOnly = true)\n    public Order findOrder(Long id) {\n        return orderRepository.findById(id).orElse(null);\n    }\n}\n\n// Controller Layer\n@RestController\npublic class OrderController {\n    @GetMapping("/orders/{id}/items")\n    public int getLineItemCount(@PathVariable Long id) {\n        Order order = service.findOrder(id);\n        // CRASH! The transaction is over, the session is closed.\n        return order.getLineItems().size();\n    }\n}`, correctCode: `// Fix 1: Initialize the collection\n@Transactional(readOnly = true)\npublic Order findOrderWithItems(Long id) {\n    Order order = orderRepository.findById(id).orElse(null);\n    if (order != null) {\n        Hibernate.initialize(order.getLineItems()); // Force loading\n    }\n    return order;\n}\n\n// Fix 2: Use a DTO (often a better approach)\n@Transactional(readOnly = true)\npublic OrderDTO findOrderDTO(Long id) {\n    Order order = orderRepository.findById(id).orElseThrow();\n    return new OrderDTO(order.getId(), order.getLineItems().size());\n}`, fix: "Initialize the required data within the transaction or use a Data Transfer Object (DTO)." },
+                    { id: "event-listener", title: "8. Misusing `@EventListener`", mistake: "Using a standard `@EventListener` for an action that should only happen *after* a transaction commits. The standard listener fires immediately, leading to inconsistencies if the transaction later rolls back.", incorrectCode: `@Service\npublic class RegistrationService {\n    @Transactional\n    public void registerUser(User user) {\n        userRepository.save(user);\n        // This event fires immediately.\n        publisher.publishEvent(new UserRegisteredEvent(user));\n        if (someConditionFails) { throw new RuntimeException("Rollback!"); }\n    }\n}`, correctCode: `@Component\npublic class TransactionalEmailListener {\n    // This method will only be called AFTER the transaction commits.\n    @TransactionalEventListener\n    public void onUserRegistered(UserRegisteredEvent event) {\n        // Send email safely here.\n    }\n}`, fix: "Use `@TransactionalEventListener`, which hooks into the transaction's outcome. By default, it only runs after a successful commit." }
+                ]
+            },
+            {
+                category: "Part 4: Configuration & Attributes",
+                items: [
+                    { id: "propagation-level", title: "9. Wrong Propagation Level", mistake: "Not understanding transaction propagation. For example, expecting `REQUIRED` (the default) to start a new, independent transaction when one already exists, when you actually need `REQUIRES_NEW`.", incorrectCode: `@Service\npublic class BillingService {\n    @Autowired private AuditService auditService;\n\n    @Transactional\n    public void processPayment() {\n        // ... payment logic ...\n        // We want the audit log to save even if the payment rolls back.\n        // But with default propagation, it will be part of the same transaction.\n        auditService.logAttempt("payment processed");\n    }\n}`, correctCode: `@Service\npublic class AuditService {\n    @Transactional(propagation = Propagation.REQUIRES_NEW)\n    public void logAttempt(String message) {\n        // This will now run in its own transaction and commit independently,\n        // regardless of what happens to the calling transaction.\n        auditRepository.save(new AuditLog(message));\n    }\n}`, fix: "Choose the correct propagation level for your needs. `REQUIRES_NEW` will suspend the current transaction and start a completely new, independent one." },
+                    { id: "isolation-levels", title: "10. Ignoring Isolation Levels", mistake: "Relying on the default isolation level (`READ_COMMITTED`) can lead to concurrency issues like non-repeatable reads or phantom reads in complex, multi-step operations.", incorrectCode: `@Service\npublic class InventoryService {\n    @Transactional\n    public void checkStockLevels() {\n        int initialCount = productRepository.count();\n        // Another transaction could add a product here.\n        int finalCount = productRepository.count();\n        // initialCount might not equal finalCount (a phantom read).\n    }\n}`, correctCode: `@Service\npublic class InventoryService {\n    @Transactional(isolation = Isolation.REPEATABLE_READ)\n    public void checkStockLevels() {\n        // With REPEATABLE_READ, the view of the data is frozen for this transaction.\n        // initialCount will equal finalCount.\n    }\n}`, fix: "Specify a stricter isolation level when you need a consistent snapshot of data." },
+                    { id: "readonly-optimization", title: "11. Forgetting `readOnly` Optimization", mistake: "For operations that only read data, not using `readOnly = true` misses an important optimization hint for the persistence provider (like Hibernate) and the database.", incorrectCode: `@Service\npublic class ProductService {\n    @Transactional // Default is read-write\n    public Product findProductById(Long id) {\n        return productRepository.findById(id);\n    }\n}`, correctCode: `@Service\npublic class ProductService {\n    @Transactional(readOnly = true)\n    public Product findProductById(Long id) {\n        return productRepository.findById(id);\n    }\n}`, fix: "Mark all read-only methods as such. This can improve performance by disabling dirty checking and enabling other database-level optimizations." },
+                    { id: "no-timeout", title: "12. Not Setting a Timeout", mistake: "By default, transactions have no timeout. A transaction that hangs due to a deadlock or a long query can hold database connections indefinitely, potentially crashing your application.", incorrectCode: `@Service\npublic class ReportingService {\n    @Transactional\n    public void generateComplexReport() {\n        // If this hangs, the transaction and its connection are held forever.\n    }\n}`, correctCode: `@Service\npublic class ReportingService {\n    @Transactional(timeout = 120)\n    public void generateComplexReport() {\n        // This transaction will automatically fail and roll back after 120 seconds.\n    }\n}`, fix: "Set a sensible timeout (in seconds) for any transaction that could potentially hang." }
+                ]
+            },
+            {
+                category: "Part 5: Advanced & Edge Case Scenarios",
+                items: [
+                    { id: "async-combination", title: "13. Incorrectly Combining with `@Async`", mistake: "By default, the transaction context is **not** propagated to asynchronous threads. Calling an `@Async` method from within a `@Transactional` method means the async code will run *outside* the original transaction.", incorrectCode: `@Service\npublic class OrderProcessingService {\n    @Autowired private EmailNotificationService emailService;\n\n    @Transactional\n    public void placeOrder(Order order) {\n        orderRepository.save(order); // Saved but not yet committed\n        // This might not see the new order in the DB if it queries immediately.\n        emailService.sendOrderConfirmation(order.getId());\n    }\n}\n\n@Service\npublic class EmailNotificationService {\n    @Async\n    public void sendOrderConfirmation(Long orderId) {\n        // This might fail to find the order because the original transaction hasn't committed.\n        Order order = orderRepository.findById(orderId).orElse(null);\n    }\n}`, correctCode: `@Service\npublic class OrderProcessingService {\n    @Autowired private ApplicationEventPublisher eventPublisher;\n\n    @Transactional\n    public void placeOrder(Order order) {\n        orderRepository.save(order);\n        eventPublisher.publishEvent(new OrderPlacedEvent(order.getId()));\n    }\n}\n\n@Component\npublic class OrderPlacedListener {\n    @Autowired private EmailNotificationService emailService;\n\n    @TransactionalEventListener // Defaults to AFTER_COMMIT\n    public void onOrderPlaced(OrderPlacedEvent event) {\n        emailService.sendOrderConfirmation(event.getOrderId());\n    }\n}`, fix: "The safest pattern is to trigger the async operation only *after* the main transaction has successfully committed, using a `@TransactionalEventListener`." },
+                    { id: "test-rollbacks", title: "14. Breaking Test Rollbacks with `REQUIRES_NEW`", mistake: "Spring's testing support (`@Transactional` on a test method) works by starting a transaction and rolling it back at the end of the test. However, if your service code uses `Propagation.REQUIRES_NEW`, it creates a *separate, inner transaction that will actually commit*, leaving data in the database and making your tests stateful and unreliable.", incorrectCode: `// Service code\n@Service\npublic class AuditService {\n    @Transactional(propagation = Propagation.REQUIRES_NEW)\n    public void log(String message) {\n        auditRepository.save(new AuditLog(message));\n    }\n}\n\n// Test code\n@SpringBootTest\n@Transactional // This should roll back everything at the end.\npublic class MyServiceTest {\n    @Test\n    public void testSomething() {\n        auditService.log("test log"); // This COMMITs to the database!\n    }\n}`, correctCode: `// In test code\n@AfterEach\nvoid cleanup() {\n    // Manual cleanup is now required because REQUIRES_NEW committed.\n    auditRepository.deleteAll();\n}`, fix: "Avoid using `REQUIRES_NEW` in code run inside rollback-based tests. If you must, perform manual cleanup in an `@AfterEach` block or mock the bean." },
+                    { id: "java-streams", title: "15. Forgetting Transaction Boundaries with Java Streams", mistake: "When using a JPA repository method that returns a `Stream<T>`, the underlying database connection may be held open until the stream is closed. If the `@Transactional` boundary ends before the stream is fully processed, you'll get an exception.", incorrectCode: `@Service\npublic class UserService {\n    @Transactional(readOnly = true)\n    public Stream<User> findAllUsers() {\n        // This method returns an open Stream connected to the database.\n        return userRepository.findAllAsStream();\n    }\n}\n\n// In another service/controller\npublic void processAllUsers() {\n    // The transaction from findAllUsers() ends as soon as the method returns.\n    Stream<User> users = userService.findAllUsers();\n    // CRASH! The session is closed, but the stream tries to fetch more data.\n    users.forEach(user -> System.out.println(user.getName()));\n}`, correctCode: `@Service\npublic class UserService {\n    @Transactional(readOnly = true)\n    public void processAllUsers(Consumer<User> userProcessor) {\n        try (Stream<User> users = userRepository.findAllAsStream()) {\n            // The stream is fully processed and closed inside the transaction boundary.\n            users.forEach(userProcessor);\n        }\n    }\n}\n\n// In another service/controller\npublic void processAllUsers() {\n    // Pass the processing logic as a lambda.\n    userService.processAllUsers(user -> System.out.println(user.getName()));\n}`, fix: "Ensure the entire stream processing happens *within* the same transaction. Pass the logic to be executed on the stream into the transactional method." }
+                ]
+            }
+        ];
+
+        const navContainer = document.getElementById('nav-container');
+        const contentContainer = document.getElementById('content-container');
+
+        function highlightSyntax(code) {
+            let html = code.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            const keywords = ['public', 'private', 'protected', 'class', 'interface', 'enum', 'void', 'if', 'else', 'for', 'while', 'do', 'switch', 'case', 'default', 'try', 'catch', 'finally', 'throw', 'throws', 'return', 'new', 'import', 'package', 'extends', 'implements', 'static', 'final', 'this', 'super', 'true', 'false', 'null'];
+            const types = ['String', 'Long', 'int', 'void', 'boolean', 'double', 'float', 'Order', 'User', 'Stream', 'Consumer', 'Hibernate', 'OrderDTO', 'MyService', 'AuditService', 'EmailNotificationService', 'OrderPlacedEvent', 'ApplicationEventPublisher', 'AuditLog', 'IOException', 'RuntimeException', 'Propagation', 'Isolation'];
+            const regex = new RegExp(`(\\/\\*[\\s\\S]*?\\*\\/|\\/\\/.*)|(".*?")|(@[A-Za-z]+)|\\b(${keywords.join('|')})\\b|\\b(${types.join('|')})\\b|([a-zA-Z_][a-zA-Z0-9_]+)(?=\\()`, 'g');
+            return html.replace(regex, (match, comment, string, annotation, keyword, type, method) => {
+                if (comment) return `<span class="code-comment">${comment}</span>`;
+                if (string) return `<span class="code-string">${string}</span>`;
+                if (annotation) return `<span class="code-annotation">${annotation}</span>`;
+                if (keyword) return `<span class="code-keyword">${keyword}</span>`;
+                if (type) return `<span class="code-class-name">${type}</span>`;
+                if (method) return `<span class="code-method">${method}</span>`;
+                return match;
+            });
+        }
+        
+        mistakesData.forEach(categoryData => {
+            const categoryNav = document.createElement('div');
+            categoryNav.innerHTML = `<h4 class="font-semibold text-slate-400 text-xs tracking-widest uppercase">${categoryData.category}</h4>`;
+            const navList = document.createElement('ul');
+            navList.className = 'mt-3 space-y-2';
+            
+            categoryData.items.forEach(item => {
+                const navItem = document.createElement('li');
+                navItem.innerHTML = `<a href="#${item.id}" class="nav-link block text-slate-300 p-2 rounded-md transition-all duration-200 text-sm">${item.title}</a>`;
+                navList.appendChild(navItem);
+
+                const contentSection = document.createElement('section');
+                contentSection.id = item.id;
+                contentSection.className = 'content-section p-8 rounded-2xl shadow-2xl';
+                contentSection.innerHTML = `
+                    <h2 class="text-3xl font-bold tracking-tight">${item.title}</h2>
+                    <p class="mt-4 text-slate-400 max-w-none">${item.mistake}</p>
+                    <div class="mt-8">
+                        <div class="flex bg-slate-900/70 p-1 rounded-lg w-min space-x-1">
+                            <button data-target="${item.id}-incorrect" class="code-toggle-btn active-toggle px-4 py-1.5 text-sm font-semibold rounded-md transition-all duration-200 flex items-center gap-2">❌ Incorrect</button>
+                            <button data-target="${item.id}-correct" class="code-toggle-btn px-4 py-1.5 text-sm font-semibold rounded-md transition-all duration-200 flex items-center gap-2">✅ Correct</button>
+                        </div>
+                        <div id="${item.id}-incorrect" class="code-block mt-2">
+                            <pre class="p-4 rounded-b-lg rounded-r-lg overflow-x-auto text-sm"><code>${highlightSyntax(item.incorrectCode)}</code></pre>
+                        </div>
+                        <div id="${item.id}-correct" class="code-block mt-2 hidden">
+                             <pre class="p-4 rounded-b-lg rounded-r-lg overflow-x-auto text-sm"><code>${highlightSyntax(item.correctCode)}</code></pre>
+                        </div>
+                    </div>
+                    <div class="mt-8 p-5 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-l-4 border-purple-400 rounded-r-lg">
+                        <h4 class="font-semibold text-purple-300">The Fix</h4>
+                        <p class="mt-1 text-slate-300 text-sm">${item.fix}</p>
+                    </div>
+                `;
+                contentContainer.appendChild(contentSection);
+            });
+            categoryNav.appendChild(navList);
+            navContainer.appendChild(categoryNav);
+        });
+
+        document.querySelectorAll('.code-toggle-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const parent = button.closest('.mt-8');
+                parent.querySelectorAll('.code-toggle-btn').forEach(btn => btn.classList.remove('active-toggle'));
+                button.classList.add('active-toggle');
+                parent.querySelectorAll('.code-block').forEach(block => block.classList.add('hidden'));
+                document.getElementById(button.dataset.target).classList.remove('hidden');
+            });
+        });
+        
+        const sections = document.querySelectorAll('.content-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        let currentActiveId = '';
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    currentActiveId = entry.target.id;
+                    updateNavHighlight();
+                }
+            });
+        }, { rootMargin: "-40% 0px -60% 0px" });
+
+        sections.forEach(section => observer.observe(section));
+
+        function updateNavHighlight() {
+            navLinks.forEach(link => {
+                if (link.getAttribute('href').substring(1) === currentActiveId) {
+                    link.classList.add('highlight');
+                } else {
+                    link.classList.remove('highlight');
+                }
+            });
+        }
+
+        navContainer.addEventListener('mouseleave', () => {
+            updateNavHighlight();
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                navLinks.forEach(l => l.classList.remove('highlight'));
+                link.classList.add('highlight');
+            });
+        });
+
+        document.addEventListener('mousemove', e => {
+            document.querySelectorAll('.content-section').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--x', `${x}px`);
+                card.style.setProperty('--y', `${y}px`);
+            });
+        });
+    </script>
+</body>
+</html>
